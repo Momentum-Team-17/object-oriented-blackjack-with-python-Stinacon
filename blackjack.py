@@ -40,6 +40,24 @@ class Player:
         for card in self.hand:
             print(card)
 
+    # Do I want below method in Player, or Game?
+    def calculate_hand(self):
+        hand_value = 0
+        aces = 0
+        for card in self.hand:
+            if card.rank == 'A':
+                aces += 1
+            elif card.rank in ['J', 'Q', 'K']:
+                hand_value += 10
+            else:
+                hand_value += card.rank
+        for i in range(aces):
+            if hand_value + 11 > 21:
+                hand_value += 1
+            else:
+                hand_value += 11
+        return hand_value
+
     # def turn(self):
     #     '''Player decides how many times to hit before staying'''
     #     pass
@@ -85,14 +103,14 @@ class Game:
 
     def deal(self):
         self.deck.shuffle()
-        print(new_game.player)
+        print(self.player)
         card = self.deck.cards.pop()
         self.player.hand.append(card)
         card = self.deck.cards.pop()
         self.player.hand.append(card)
         print(f"{self.player.name}'s hand is ")
         self.player.show_hand()
-        print(new_game.dealer)
+        print(self.dealer)
         card = self.deck.cards.pop()
         self.dealer.hand.append(card)
         card = self.deck.cards.pop()
@@ -107,17 +125,23 @@ class Game:
         self.dealer.show_hand()
 
     def player_turn(self):
-        choice = input(
-            "Type hit if you want to hit; stay if you want to stay. ")
-        if choice == "hit":
+        choice = "hit"
+        while choice == "hit":
+            choice = input(
+                "Type hit if you want to hit; stay if you want to stay. ")
             # do I make 'hit' a while loop? i.e, as long as their choice == "hit", they keep running through lines 110-117
             # i tried changing if to while - it gave an error that on line 15 pop was trying to pull from an empty list??
             card = self.deck.cards.pop()
             self.player.hand.append(card)
             print(f"{self.player.name}'s hand is ")
             self.player.show_hand()
+            # variable or count to add cards in hand; if > 21 then "bust", game is over
         else:
             print("Player chooses to stay; it's the dealer's turn now.")
+
+    def win_or_lose(self):
+        pass
+    # use hand calculation to print who won or lost and ask if you want to play again; could also be part of another function like calculate
 
     # def money_available(participants):
     #     pot = 0
@@ -128,15 +152,9 @@ class Game:
 
 new_game = Game()
 # calls the Game class's init method in line 54
-new_game.setup()
-print(new_game.player)
-# calls Player __str__ method
-print(new_game.player.hand)
-print(new_game.dealer)
-# calls Dealer __str__ method
-print(new_game.dealer.hand)
 new_game.deal()
 new_game.player_turn()
+new_game.player.calculate_hand()
 
 
 # for card in new_game.deck.cards:
