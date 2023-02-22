@@ -1,17 +1,16 @@
+import random
+
 SUITS = ['♥️', '♣️', '♠️', '♦️']
 RANKS = [2, 3, 4, 5, 6, 7, 8, 9, 10, 'J', 'Q', 'K', 'A']
 
 
 class Card:
-    def __init__(self, suit='🐕', rank=20):
+    def __init__(self, suit, rank):
         self.suit = suit
         self.rank = rank
 
     def __str__(self):
         return f'{self.rank} of {self.suit}'
-
-    def get_rank(self):
-        return self.rank
 
 
 class Deck:
@@ -25,6 +24,9 @@ class Deck:
                 new_card = Card(suit, rank)
                 self.cards.append(new_card)
 
+    def shuffle(self):
+        random.shuffle(self.cards)
+
 
 class Player:
     def __init__(self):
@@ -33,6 +35,10 @@ class Player:
 
     def __str__(self):
         return f'{self.name} is the player'
+
+    def show_hand(self):
+        for card in self.hand:
+            print(card)
 
     def turn(self):
         '''Player decides how many times to hit before staying'''
@@ -50,11 +56,12 @@ class Dealer(Player):
     def __str__(self):
         # when we write variables and methods with the same name as the parent class,
         # they override the code from the parent class (Player)
-        return f'{self.name} is the dealer'
+        return "I am the dealer now."
 
     def turn(self):
         '''unlike player, dealer follows house rules and stays at 17,
         no choice'''
+        pass
 
     def end_game(self):
         pass
@@ -62,13 +69,12 @@ class Dealer(Player):
 
 class Game:
 
-    def __init__(self, deck=None):
+    def __init__(self):
         # can set default values in the signature line, like 'deck=None'
         self.player = Player()
         # the value of self.player is an instance of the class Player
         self.dealer = Dealer()
-        self.deck = deck
-        # self.setup()
+        self.setup()
         # calling the Game class's setup function
 
     def setup(self):
@@ -76,6 +82,18 @@ class Game:
         # calls line 13, creates a deck
         self.deck.add_cards()
         # calls line 16, adds cards to the deck
+        
+    def deal(self):
+        
+
+    def player_turn(self):
+        choice = (input(
+            "Type hit if you want to hit; stay if you want to stay. ")).lower
+        if choice == "hit":
+            card = self.deck.cards.pop()
+            self.player.hand.append(card)
+            print(f'{self.player.name}s hand is ')
+            self.player.show_hand()
 
     def money_available(participants):
         pot = 0
