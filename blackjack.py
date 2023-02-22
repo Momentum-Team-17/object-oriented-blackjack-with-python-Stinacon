@@ -40,9 +40,9 @@ class Player:
         for card in self.hand:
             print(card)
 
-    def turn(self):
-        '''Player decides how many times to hit before staying'''
-        pass
+    # def turn(self):
+    #     '''Player decides how many times to hit before staying'''
+    #     pass
 
 
 class Dealer(Player):
@@ -58,10 +58,10 @@ class Dealer(Player):
         # they override the code from the parent class (Player)
         return "I am the dealer now."
 
-    def turn(self):
-        '''unlike player, dealer follows house rules and stays at 17,
-        no choice'''
-        pass
+    # def turn(self):
+    #     '''unlike player, dealer follows house rules and stays at 17,
+    #     no choice'''
+    #     pass
 
     def end_game(self):
         pass
@@ -82,24 +82,48 @@ class Game:
         # calls line 13, creates a deck
         self.deck.add_cards()
         # calls line 16, adds cards to the deck
-        
+
     def deal(self):
-        
+        self.deck.shuffle()
+        print(new_game.player)
+        card = self.deck.cards.pop()
+        self.player.hand.append(card)
+        card = self.deck.cards.pop()
+        self.player.hand.append(card)
+        print(f"{self.player.name}'s hand is ")
+        self.player.show_hand()
+        print(new_game.dealer)
+        card = self.deck.cards.pop()
+        self.dealer.hand.append(card)
+        card = self.deck.cards.pop()
+        self.dealer.hand.append(card)
+        print('Dealer hand is ')
+        self.dealer.show_hand()
+
+    def dealer_turn(self):
+        card = self.deck.cards.pop()
+        self.dealer.hand.append(card)
+        print("The dealer's hand is ")
+        self.dealer.show_hand()
 
     def player_turn(self):
-        choice = (input(
-            "Type hit if you want to hit; stay if you want to stay. ")).lower
+        choice = input(
+            "Type hit if you want to hit; stay if you want to stay. ")
         if choice == "hit":
+            # do I make 'hit' a while loop? i.e, as long as their choice == "hit", they keep running through lines 110-117
+            # i tried changing if to while - it gave an error that on line 15 pop was trying to pull from an empty list??
             card = self.deck.cards.pop()
             self.player.hand.append(card)
-            print(f'{self.player.name}s hand is ')
+            print(f"{self.player.name}'s hand is ")
             self.player.show_hand()
+        else:
+            print("Player chooses to stay; it's the dealer's turn now.")
 
-    def money_available(participants):
-        pot = 0
-        for participant in participants:
-            pot += input(int(('What is your bet')))
-        return pot
+    # def money_available(participants):
+    #     pot = 0
+    #     for participant in participants:
+    #         pot += input(int(('What is your bet')))
+    #     return pot
 
 
 new_game = Game()
@@ -111,6 +135,9 @@ print(new_game.player.hand)
 print(new_game.dealer)
 # calls Dealer __str__ method
 print(new_game.dealer.hand)
+new_game.deal()
+new_game.player_turn()
+
 
 # for card in new_game.deck.cards:
 #     print(card)
